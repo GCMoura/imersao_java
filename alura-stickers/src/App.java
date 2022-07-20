@@ -1,4 +1,6 @@
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -8,6 +10,7 @@ import java.util.Map;
 
 
 public class App {
+
     public static void main(String[] args) throws Exception {
 
         // acessar os dados e fazer conexão HTTP
@@ -29,12 +32,20 @@ public class App {
         List<Map<String, String>> moviesList = parser.parse(body);
 
         // exibir os dados
+        
+        StickerFactory factory = new StickerFactory();
 
         for(Map<String, String> movie: moviesList ){
-            System.out.println(movie.get("title"));
-            System.out.println(movie.get("image"));
-            System.out.println(movie.get("imDbRating"));
-            System.out.println();
+
+            String urlImage = movie.get("image");
+            String movieTitle = movie.get("title");
+
+            InputStream inputStream = new URL(urlImage).openStream();
+
+            String fileName = movieTitle + ".png";
+
+            factory.create(inputStream, fileName);
+
         }
 
     }
